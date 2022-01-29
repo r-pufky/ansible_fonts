@@ -1,0 +1,9 @@
+---
+###############################################################################
+# Default Font Package Dependencies
+###############################################################################
+# Default required packages for Font install.
+
+font_default_packages:
+  - 'fontconfig'
+  - 'rsync'

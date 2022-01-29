@@ -1,0 +1,13 @@
+---
+###############################################################################
+# Font Role Configuration
+###############################################################################
+# Base path for font installation on host.
+fonts_path: '/usr/local/share/fonts/ansible'
+
+# Source location of fonts on ansible host.
+fonts_source: 'group_vars/all/data/fonts'
+
+# Delete files on target that are not in source directories; this should only
+# be temporarily enabled as fc-cache will regenerate uuid files each run.
+font_force_delete: false

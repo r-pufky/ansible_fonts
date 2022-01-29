@@ -1,0 +1,48 @@
+---
+###############################################################################
+# Fonts Install
+###############################################################################
+# Install custom fonts.
+#
+# fc-cache generates .uuid files in each font directory which causes ansible
+# tasks to never reach a steady state between runs. Instead, a playbook can
+# specify 'delete' which will enable deletion of files not existing in the
+# source directory on the target machine for that run. This should only be done
+# on as-needed basis.
+#
+# Args:
+#   font_force_delete: boolean true to delete files on target that are not in
+#       source directories (see note above.)
+#
+# Reference:
+# * https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/130
+
+- name: 'install | install packages'
+  ansible.builtin.apt:
+    name: '{{ font_default_packages }}'
+    state: latest
+
+- name: 'install | copying custom fonts'
+  ansible.posix.synchronize:
+    src:       '{{ fonts_source }}'
+    dest:      '{{ fonts_path }}'
+    delete:    '{{ font_force_delete }}'
+    recursive: true
+    archive:   false
+    checksum:  true
+  register: _fonts
+
+- name: 'install | set permissions' # noqa no-handler conditional
+  ansible.builtin.shell: |
+    chown -R root:staff '{{ fonts_path }}' &&
+    find '{{ fonts_path }}' -type d -exec chmod 0755 {} \; &&
+    find '{{ fonts_path }}' -type f -exec chmod 0644 {} \;
+  args:
+    warn: false
+  changed_when: false
+  when: _fonts.changed
+
+- name: 'install | refresh font cache' # noqa no-handler conditional
+  ansible.builtin.command: '/usr/bin/fc-cache -f -v'
+  changed_when: false
+  when: _fonts.changed
