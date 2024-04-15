@@ -10,4 +10,4 @@ fonts_source: 'group_vars/all/data/fonts'
 
 # Delete files on target that are not in source directories; this should only
 # be temporarily enabled as fc-cache will regenerate uuid files each run.
-font_force_delete: false
+fonts_force_delete: false

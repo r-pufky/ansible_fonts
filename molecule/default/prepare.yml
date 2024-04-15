@@ -1,0 +1,41 @@
+---
+# Use a Google public domain font for testing font installation. Store in a
+# static temporary location to cache downloaded fonts between tests instead of
+# using tempfile.
+#
+# Reference:
+# * https://github.com/google/fonts
+- name: 'Default | prepare'
+  hosts: 'localhost'
+  gather_facts: false
+  tasks:
+    - name: 'Default | prepare | create testing font directory source'
+      ansible.builtin.file:
+        path: '/tmp/fonts'
+        mode: '0770'
+        state: 'directory'
+
+    - name: 'Default | prepare | download testing font'
+      ansible.builtin.get_url:
+        url: 'https://github.com/google/fonts/blob/main/ufl/ubuntu/Ubuntu-Regular.ttf'  # yamllint disable-line rule:line-length
+        dest: '/tmp/fonts/fonts-test-font.ttf'
+        mode: '0644'
+        force: false
+        validate_certs: false
+
+- name: 'Default | prepare | fonts_force_delete'
+  hosts: 'debian-12-force-delete'
+  gather_facts: false
+  tasks:
+    - name: 'Default | prepare | create existing fonts directory'
+      ansible.builtin.file:
+        path: '/usr/local/share/fonts/ansible/fonts'
+        mode: '0755'
+        state: 'directory'
+
+    - name: 'Default | prepare | inject additional font file to be deleted'
+      ansible.builtin.copy:
+        src: '/tmp/fonts/fonts-test-font.ttf'
+        dest: '/usr/local/share/fonts/ansible/fonts/should-be-deleted.ttf'
+        mode: '0644'
+        directory_mode: '0755'

@@ -3,7 +3,9 @@
 # Default Font Package Dependencies
 ###############################################################################
 # Default required packages for Font install.
-
-font_default_packages:
+fonts_default_packages:
   - 'fontconfig'
   - 'rsync'
+
+# Default state for apt package installation. See ansible.builtin.apt.
+fonts_package_state: 'latest'

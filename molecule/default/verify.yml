@@ -1,0 +1,33 @@
+---
+- name: 'Default | verify | all test systems have test font installed'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Default | verify | state installed font location'
+      ansible.builtin.stat:
+        path: '/usr/local/share/fonts/ansible/fonts/fonts-test-font.ttf'
+      register: _test_font_installed
+
+    - name: 'Default | verify | verify font installed'
+      ansible.builtin.assert:
+        that:
+          - _test_font_installed.stat.exists
+          - _test_font_installed.stat.mode == '0644'
+        success_msg: 'font library installed correctly.'
+        fail_msg: 'font library not found.'
+
+- name: 'Default | verify | fonts_force_delete removes extra fonts'
+  hosts: 'debian-12-force-delete'
+  gather_facts: false
+  tasks:
+    - name: 'Default | verify | stat deleted font location'
+      ansible.builtin.stat:
+        path: '/usr/local/share/fonts/ansible/fonts/should-be-deleted.ttf'
+      register: _test_font_deleted
+
+    - name: 'Default | verify | verify font force deleted'
+      ansible.builtin.assert:
+        that:
+          - not _test_font_deleted.stat.exists
+        success_msg: 'fonts_force_delete: extra font files removed.'
+        fail_msg: 'fonts_force_delete: extra font files still exist.'
