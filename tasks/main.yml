@@ -23,7 +23,7 @@
     state: '{{ fonts_package_state }}'
 
 # TODO(2.19): Deprecation warning removed in ansible 2.19. stdin is **not**
-#     used in the syncrhonize module and is a spurrious warning.
+#     used in the synchronize module and is a spurious warning.
 #
 # Reference:
 # * https://github.com/ansible-collections/ansible.posix/pull/421
