@@ -17,17 +17,17 @@
 # Reference:
 # * https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/130
 
-- name: 'Install | install packages'
+- name: 'Install packages'
   ansible.builtin.apt:
-    name: '{{ fonts_default_packages }}'
-    state: '{{ fonts_package_state }}'
+    name: '{{ fonts_role_packages }}'
+    state: '{{ fonts_role_package_state }}'
 
 # TODO(2.19): Deprecation warning removed in ansible 2.19. stdin is **not**
 #     used in the synchronize module and is a spurious warning.
 #
 # Reference:
 # * https://github.com/ansible-collections/ansible.posix/pull/421
-- name: 'Install | copying custom fonts'
+- name: 'Copy custom fonts'
   ansible.posix.synchronize:
     src: '{{ fonts_source }}'
     dest: '{{ fonts_path }}'
@@ -35,7 +35,6 @@
     recursive: true
     archive: false
     checksum: true
-  register: _fonts
   notify:
     - 'Handlers | set permissions'
     - 'Handlers | refresh font cache'

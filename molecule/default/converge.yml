@@ -5,4 +5,4 @@
   tasks:
     - name: 'Default | converge | apply font role to test systems'
       ansible.builtin.include_role:
-        name: 'fonts'
+        name: 'r_pufky.srv.fonts'

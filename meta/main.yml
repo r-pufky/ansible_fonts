@@ -1,8 +1,7 @@
 ---
 galaxy_info:
-  role_name: 'fonts'
   author: 'r_pufky'
-  description: 'font management'
+  description: 'Font management.'
   company: 'N/A'
   license: 'AGPL-3.0 License'
   min_ansible_version: '2.16.0'
@@ -10,8 +9,6 @@ galaxy_info:
   platforms:
     - name: 'Debian'
       versions:
-        - 'buster'
-        - 'bullseye'
         - 'bookworm'
 
   galaxy_tags:

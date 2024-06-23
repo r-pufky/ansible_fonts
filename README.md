@@ -7,7 +7,7 @@ Manage custom system fonts.
 [collections/roles](https://github.com/r-pufky/ansible_fonts/blob/main/meta/requirements.yml)
 
 ## Role Variables
-[defaults](https://github.com/r-pufky/ansible_fonts/blob/main/defaults/)
+[defaults](https://github.com/r-pufky/ansible_fonts/blob/main/defaults/main.yml)
 
 ## Dependencies
 N/A
@@ -30,11 +30,19 @@ fonts_source: 'group_vars/data/fonts'
 
 site.yml
 ``` yaml
-- name:   'linux box'
-  hosts:  'computer.example.com'
+- name: 'linux box'
+  hosts: 'computer.example.com'
   become: true
   roles:
      - 'r_pufky.srv.fonts'
+```
+
+## Unit Testing
+Test framework requires molecule and rootless podman setup.
+
+Run all unit tests:
+``` bash
+molecule test --all
 ```
 
 ## Issues
