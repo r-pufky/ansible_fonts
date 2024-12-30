@@ -1,11 +1,4 @@
 ---
-- name: 'Handlers | set permissions'
-  ansible.builtin.shell: |
-    chown -R root:staff '{{ fonts_path }}' &&
-    find '{{ fonts_path }}' -type d -exec chmod 0755 {} \; &&
-    find '{{ fonts_path }}' -type f -exec chmod 0644 {} \;
-  changed_when: false
-
 - name: 'Handlers | refresh font cache'
   ansible.builtin.command: '/usr/bin/fc-cache -f -v'
   changed_when: false

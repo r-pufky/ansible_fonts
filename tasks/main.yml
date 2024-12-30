@@ -4,37 +4,33 @@
 ###############################################################################
 # Install custom fonts.
 #
-# fc-cache generates .uuid files in each font directory which causes ansible
-# tasks to never reach a steady state between runs. Instead, a playbook can
-# specify 'delete' which will enable deletion of files not existing in the
-# source directory on the target machine for that run. This should only be done
-# on as-needed basis.
-#
-# Args:
-#   fonts_force_delete: boolean true to delete files on target that are not in
-#       source directories (see note above.)
 #
 # Reference:
-# * https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/130
+# * https://wiki.debian.org/Fonts#Adding_fonts
 
 - name: 'Install packages'
-  ansible.builtin.apt:
-    name: '{{ fonts_role_packages }}'
-    state: '{{ fonts_role_package_state }}'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.apt'
+  vars:
+    apt_packages:
+      - '{{ fonts_role_packages }}'
+      - '{{ fonts_packages }}'
+    apt_package_update_cache: true
 
-# TODO(2.19): Deprecation warning removed in ansible 2.19. stdin is **not**
-#     used in the synchronize module and is a spurious warning.
-#
-# Reference:
-# * https://github.com/ansible-collections/ansible.posix/pull/421
 - name: 'Copy custom fonts'
+  notify:
+    - 'Handlers | refresh font cache'
   ansible.posix.synchronize:
     src: '{{ fonts_source }}'
     dest: '{{ fonts_path }}'
-    delete: '{{ fonts_force_delete }}'
+    delete: true
     recursive: true
     archive: false
     checksum: true
-  notify:
-    - 'Handlers | set permissions'
-    - 'Handlers | refresh font cache'
+
+- name: 'Set permissions'
+  ansible.builtin.shell: |
+    chown -R root:staff '{{ fonts_path }}' &&
+    find '{{ fonts_path }}' -type d -exec chmod 0755 {} \; &&
+    find '{{ fonts_path }}' -type f -exec chmod 0644 {} \;
+  changed_when: false

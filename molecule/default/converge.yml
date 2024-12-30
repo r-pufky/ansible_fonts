@@ -1,8 +1,8 @@
 ---
 - name: 'Default | converge'
-  hosts: all
+  hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | converge | apply font role to test systems'
+    - name: 'Default | converge | apply r_pufky.srv.fonts'
       ansible.builtin.include_role:
         name: 'r_pufky.srv.fonts'
