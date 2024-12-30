@@ -1,4 +1,5 @@
 ---
+# Specified fonts should be installed removing any additional fonts.
 dependency:
   name: 'galaxy'
 driver:
@@ -15,26 +16,12 @@ provisioner:
     group_vars:
       all:
         fonts_source: '/tmp/fonts'
-    host_vars:
-      debian-12-force-delete:
-        fonts_force_delete: true
 platforms:
-  - name: 'debian-12'
+  - name: 'fonts-debian-12-default'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-    capabilities:
-      - 'SYS_ADMIN'
-    command: '/lib/systemd/systemd'
-    pre_build_image: true
-  - name: 'debian-12-force-delete'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
-    systemd: 'always'
-    volumes:
-      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-    capabilities:
-      - 'SYS_ADMIN'
     command: '/lib/systemd/systemd'
     pre_build_image: true
 verifier:
@@ -43,3 +30,17 @@ lint: |
   set -e
   yamllint .
   ansible-lint .
+scenario:
+  test_sequence:
+    # - 'dependency'
+    # - 'cleanup'
+    - 'destroy'
+    - 'syntax'
+    - 'create'
+    - 'prepare'
+    - 'converge'
+    - 'idempotence'
+    # - 'side_effect'
+    - 'verify'
+    # - 'cleanup'
+    - 'destroy'
