@@ -10,7 +10,8 @@ Manage custom system fonts.
 [defaults](https://github.com/r-pufky/ansible_fonts/blob/main/defaults/main.yml)
 
 ## Dependencies
-N/A
+Part of the [r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv)
+collection.
 
 ## Example Playbook
 Places fonts in a vars location for the host/group and update `fonts_source` to
@@ -26,6 +27,8 @@ custom_web_font.woff
 host_vars/computer.example.com/vars/fonts.yml
 ``` yaml
 fonts_source: 'group_vars/data/fonts'
+fonts_packages:
+  - 'fonts-liberation'
 ```
 
 site.yml
@@ -37,15 +40,15 @@ site.yml
      - 'r_pufky.srv.fonts'
 ```
 
-## Unit Testing
-Test framework requires molecule and rootless podman setup.
+## Development
+Configure [environment](https://github.com/r-pufky/ansible_collection_srv/blob/main/docs/dev/environment/README.md)
 
 Run all unit tests:
 ``` bash
 molecule test --all
 ```
 
-## Issues
+### Issues
 Create a bug and provide as much information as possible.
 
 Associate pull requests with a submitted bug.
@@ -57,5 +60,3 @@ Associate pull requests with a submitted bug.
 ## Author Information
 PGP Fingerprint: [466EEC2B67516C7117C85CE3A0BC35D16698BAB9](https://keys.openpgp.org/vks/v1/by-fingerprint/466EEC2B67516C7117C85CE3A0BC35D16698BAB9)
 | [github gist](https://gist.github.com/r-pufky/a8df36977c55b5bb20829267c4c49d22)
-
-

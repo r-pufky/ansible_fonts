@@ -5,6 +5,7 @@
 #
 # Reference:
 # * https://github.com/google/fonts
+
 - name: 'Default | prepare'
   hosts: 'localhost'
   gather_facts: false
@@ -23,19 +24,20 @@
         force: false
         validate_certs: false
 
-- name: 'Default | prepare | fonts_force_delete'
-  hosts: 'debian-12-force-delete'
+- name: 'Default | prepare | inject fonts'
+  hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | prepare | create existing fonts directory'
+    - name: 'Default | prepare | inject fonts | prep directory'
       ansible.builtin.file:
         path: '/usr/local/share/fonts/ansible/fonts'
         mode: '0755'
         state: 'directory'
 
-    - name: 'Default | prepare | inject additional font file to be deleted'
+    - name: 'Default | prepare | inject fonts | add font file to be deleted'
       ansible.builtin.copy:
         src: '/tmp/fonts/fonts-test-font.ttf'
         dest: '/usr/local/share/fonts/ansible/fonts/should-be-deleted.ttf'
         mode: '0644'
         directory_mode: '0755'
+      become: true

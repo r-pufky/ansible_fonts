@@ -1,6 +1,6 @@
 ---
 - name: 'Default | converge'
-  hosts: all
+  hosts: 'all'
   gather_facts: false
   tasks:
     - name: 'Default | converge | apply font role to test systems'
