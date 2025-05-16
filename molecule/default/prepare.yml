@@ -1,4 +1,8 @@
 ---
+# yamllint disable rule:line-length
+###############################################################################
+# Default
+###############################################################################
 # Use a Google public domain font for testing font installation. Store in a
 # static temporary location to cache downloaded fonts between tests instead of
 # using tempfile.
@@ -7,36 +11,44 @@
 # * https://github.com/google/fonts
 
 - name: 'Default | prepare'
-  hosts: 'localhost'
+  hosts: 127.0.0.1
+  connection: local
   gather_facts: false
   tasks:
-    - name: 'Default | prepare | create testing font directory source'
-      ansible.builtin.file:
-        path: '/tmp/fonts'
-        mode: '0770'
-        state: 'directory'
+    - name: 'Default | prepare | cache'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'create_cache.yml'
+      vars:
+        test_name: 'Default | prepare | cache'
 
-    - name: 'Default | prepare | download testing font'
-      ansible.builtin.get_url:
-        url: 'https://github.com/google/fonts/blob/main/ufl/ubuntu/Ubuntu-Regular.ttf'  # yamllint disable-line rule:line-length
-        dest: '/tmp/fonts/fonts-test-font.ttf'
-        mode: '0644'
-        force: false
-        validate_certs: false
+    - name: 'Default | prepare | cache | fonts-test-font.ttf'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'cache_url.yml'
+      vars:
+        test_name: 'Default | prepare | cache | fonts-test-font.ttf'
+        test_dest: 'fonts-test-font.ttf'
+        test_url: 'https://github.com/google/fonts/blob/main/ufl/ubuntu/Ubuntu-Regular.ttf'
 
 - name: 'Default | prepare | inject fonts'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | prepare | inject fonts | prep directory'
+    - name: 'Default | prepare | generate cache location'
+      ansible.builtin.set_fact:
+        _test_cache:
+          '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
+
+    - name: 'Default | prepare | inject fonts directory'
       ansible.builtin.file:
         path: '/usr/local/share/fonts/ansible/fonts'
         mode: '0755'
         state: 'directory'
 
-    - name: 'Default | prepare | inject fonts | add font file to be deleted'
+    - name: 'Default | prepare | inject font file to be deleted'
       ansible.builtin.copy:
-        src: '/tmp/fonts/fonts-test-font.ttf'
+        src: '{{ _test_cache }}/fonts-test-font.ttf'
         dest: '/usr/local/share/fonts/ansible/fonts/should-be-deleted.ttf'
         mode: '0644'
         directory_mode: '0755'

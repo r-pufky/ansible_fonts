@@ -1,5 +1,13 @@
 ---
+###############################################################################
+# Default
+###############################################################################
 # Specified fonts should be installed removing any additional fonts.
+#
+# Tests:
+# * fonts-test-font.ttf is installed.
+# * should-be-deleted.ttf font is removed.
+
 dependency:
   name: 'galaxy'
 driver:
@@ -15,7 +23,8 @@ provisioner:
   inventory:
     group_vars:
       all:
-        fonts_source: '/tmp/fonts'
+        fonts_source:
+          '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
 platforms:
   - name: 'fonts-debian-12-default'
     image: 'ghcr.io/hifis-net/debian-systemd:12'

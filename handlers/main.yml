@@ -1,4 +1,8 @@
 ---
+###############################################################################
+# Fonts Handlers
+###############################################################################
+
 - name: 'Handlers | refresh font cache'
   ansible.builtin.command: '/usr/bin/fc-cache -f -v'
   changed_when: false

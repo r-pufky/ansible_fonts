@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: 'fonts'
   author: 'r_pufky'
   description: 'Font management.'
   company: 'N/A'

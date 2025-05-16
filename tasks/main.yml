@@ -10,7 +10,7 @@
 
 - name: 'Install packages'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.apt'
+    name: 'r_pufky.deb.apt'
   vars:
     apt_packages:
       - '{{ fonts_role_packages }}'
@@ -21,7 +21,11 @@
   notify:
     - 'Handlers | refresh font cache'
   ansible.posix.synchronize:
-    src: '{{ fonts_source }}'
+    src: '{{
+        fonts_source
+        if fonts_source.endswith("/") else
+        fonts_source ~ "/"
+      }}'
     dest: '{{ fonts_path }}'
     delete: true
     recursive: true
@@ -29,7 +33,7 @@
     checksum: true
 
 - name: 'Set permissions'
-  ansible.builtin.shell: |
+  ansible.builtin.shell: >
     chown -R root:staff '{{ fonts_path }}' &&
     find '{{ fonts_path }}' -type d -exec chmod 0755 {} \; &&
     find '{{ fonts_path }}' -type f -exec chmod 0644 {} \;

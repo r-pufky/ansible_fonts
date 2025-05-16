@@ -3,27 +3,26 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | verify | state installed font location'
-      ansible.builtin.stat:
-        path: '/usr/local/share/fonts/ansible/fonts/fonts-test-font.ttf'
-      register: _test_font_installed
+    - name: 'Default | verify | fonts-test-font.ttf'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'file.yml'
+      vars:
+        test_name: 'Default | verify | fonts-test-font.ttf'
+        test_file: '/usr/local/share/fonts/ansible/fonts-test-font.ttf'
+        test_owner: 'root'
+        test_group: 'staff'
+        test_mode: '0644'
+        test_state: 'file'
 
-    - name: 'Default | verify | verify font installed'
-      ansible.builtin.assert:
-        that:
-          - _test_font_installed.stat.exists
-          - _test_font_installed.stat.mode == '0644'
-        success_msg: 'font library installed correctly.'
-        fail_msg: 'font library not found.'
-
-    - name: 'Default | verify | stat deleted font location'
-      ansible.builtin.stat:
-        path: '/usr/local/share/fonts/ansible/fonts/should-be-deleted.ttf'
-      register: _test_font_deleted
-
-    - name: 'Default | verify | verify font force deleted'
-      ansible.builtin.assert:
-        that:
-          - not _test_font_deleted.stat.exists
-        success_msg: 'fonts_force_delete: extra font files removed.'
-        fail_msg: 'fonts_force_delete: extra font files still exist.'
+    - name: 'Default | verify | should-be-deleted.ttf'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'file.yml'
+      vars:
+        test_name: 'Default | verify | should-be-deleted.ttf'
+        test_file: '/usr/local/share/fonts/ansible/should-be-deleted.ttf'
+        test_owner: '{{ omit }}'
+        test_group: '{{ omit }}'
+        test_mode: '{{ omit }}'
+        test_state: 'absent'

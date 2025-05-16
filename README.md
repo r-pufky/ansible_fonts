@@ -4,14 +4,12 @@ Manage custom system fonts.
 ## Requirements
 [supported platforms](https://github.com/r-pufky/ansible_fonts/blob/main/meta/main.yml)
 
-[collections/roles](https://github.com/r-pufky/ansible_fonts/blob/main/meta/requirements.yml)
-
 ## Role Variables
 [defaults](https://github.com/r-pufky/ansible_fonts/blob/main/defaults/main.yml)
 
 ## Dependencies
-Part of the [r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv)
-collection.
+**galaxy-ng** roles cannot be used independently. Part of
+[r_pufky.deb](https://github.com/r-pufky/ansible_collection_deb) collection.
 
 ## Example Playbook
 Places fonts in a vars location for the host/group and update `fonts_source` to
@@ -37,11 +35,11 @@ site.yml
   hosts: 'computer.example.com'
   become: true
   roles:
-     - 'r_pufky.srv.fonts'
+     - 'r_pufky.deb.fonts'
 ```
 
 ## Development
-Configure [environment](https://github.com/r-pufky/ansible_collection_srv/blob/main/docs/dev/environment/README.md)
+Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/dev/environment/README.md)
 
 Run all unit tests:
 ``` bash

@@ -3,6 +3,6 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | converge | apply r_pufky.srv.fonts'
+    - name: 'Default | converge | apply r_pufky.deb.fonts'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.fonts'
+        name: 'r_pufky.deb.fonts'
